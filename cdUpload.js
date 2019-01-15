@@ -1,7 +1,4 @@
-
 const cloudinary = require('cloudinary');
-const fs = require('fs');
-
 const keys = require('./keys');
 
 
@@ -12,34 +9,33 @@ cloudinary.config({
   api_secret: keys.api_secret 
 });
 
+// gets a screenshot, uploads it with a custom public_id
 
 
+module.exports = (site, screenshot) => {
 
-var cdUpload = (file_path) =>{
-	cloudinary.v2.uploader.upload(file_path, 
-    	(error, result) => {
+	return new Promise((resolve, reject) => {
 
-			//console.log(result, error);
-			console.log(result);
-
-    		fs.unlink(file_path, (err) => {
-  				if (err) throw err;
-  				console.log(file_path,' was deleted');
-	    	});
-
-		
+		// date and time public ID
+		const today  = new Date();
+		const dd = today.getDate();
+		const mm = today.getMonth() + 1;
+		const yyyy = today.getFullYear();
+		const hh = today.getHours();
+		const mins = today.getMinutes();
+		const dateTime = `${yyyy}-${mm}-${dd}-${hh}-${mins}`;
 
 
+		const options = {
+			folder: 'trashot',
+			public_id: `${site}-${dateTime}`
+		};
 
+		cloudinary.v2.uploader.upload_stream(options, (error,result) => {
+			if (error) reject(error)
+			else resolve(result);
+		}).end(screenshot);
+	});
 
-
-
-		});
-};
-
-
-
-
-
-module.exports = cdUpload;
+	}
 

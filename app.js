@@ -1,5 +1,9 @@
-const puppeteer = require('puppeteer');
-const path = require('path');
+const screenshot = require('./screenshot');
+const cdUpload = require('./cdUpload');
+
+
+
+
 
 const sites = [{
     url:'http://www.informer.rs',
@@ -34,32 +38,16 @@ testing for everything mocha, chai
 
 */
 
-
-function takeShots(sites) {
-
-    let now = Date();    
-
-    sites.forEach(async function(site){
-        const browser = await puppeteer.launch();
-        let page = await browser.newPage();
-        await page.goto(site.url);
-        page.setViewport({width: 800, height: 2000});
-        
-        //let timePart = moment(now, "DD-MM-YYYY");
-        let fileName = site.name +  '.png'
-        console.log(fileName);
-        await page.screenshot({path:fileName});
-        await browser.close();
-    });
+const site1 = {
+    site: 'B92',
+    url: 'http://www.b92.net'
 };
 
-takeShots(sites);
-
-/*(async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('https://www.informer.rs');
-  await page.screenshot({path: 'informer.png'});
-
-  await browser.close();
-})();*/
+screenshot(site1.url)
+.then(
+    (screenshot) => cdUpload(site1.site, screenshot))
+.then(
+    (result) => console.log(result))
+.catch((err) => {
+    console.log(err);
+});
