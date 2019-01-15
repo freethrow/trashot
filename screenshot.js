@@ -8,12 +8,11 @@ module.exports = async (url) => {
 
   const browser = await puppeteer.launch();
   let page = await browser.newPage();
-  page.setViewport({width: 800, height: 2000});
-  await page.goto(url),
-     { waitUntil: 'networkidle2' };
+  page.setViewport({width: 800, height: 1200});
+  await page.goto(url,
+     { waitUntil: 'networkidle2' });
   
   const screenshot = await page.screenshot({
-      omitBackground: true,
       encoding: 'binary'
     });
  

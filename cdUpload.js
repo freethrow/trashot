@@ -12,7 +12,7 @@ cloudinary.config({
 // gets a screenshot, uploads it with a custom public_id
 
 
-module.exports = (site, screenshot) => {
+module.exports = (name, screenshot) => {
 
 	return new Promise((resolve, reject) => {
 
@@ -28,7 +28,7 @@ module.exports = (site, screenshot) => {
 
 		const options = {
 			folder: 'trashot',
-			public_id: `${site}-${dateTime}`
+			public_id: `${name}-${dateTime}`
 		};
 
 		cloudinary.v2.uploader.upload_stream(options, (error,result) => {

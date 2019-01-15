@@ -1,18 +1,20 @@
 const screenshot = require('./screenshot');
 const cdUpload = require('./cdUpload');
 
+const mongoose = require('mongoose');
+
+const Shot = require('./models/Shot');
 
 
+//
 
+const db = require('./keys').MongoURI;
 
-const sites = [{
-    url:'http://www.informer.rs',
-    name:'informer'},
-    {
-    url:'https://www.kurir.rs/vesti/politika',
-    name:'kurir'}
-    ];
-
+mongoose.connect(db, {useNewUrlParser:true})
+    .then(() =>{console.log('MongoDB connected...');})
+    .catch((err) => {
+        console.log(err);
+    });
 
 /* TO DO: 
 ==============================================================
@@ -38,16 +40,53 @@ testing for everything mocha, chai
 
 */
 
-const site1 = {
-    site: 'B92',
-    url: 'http://www.b92.net'
-};
+const sites = [{
+    name: 'B92',
+    url: 'https://www.b92.net/info/'
+},
+{   name: 'Kurir',
+    url: 'https://www.kurir.rs'},
+    {   name: 'Informer',
+    url: 'https://www.informer.rs'}    
 
-screenshot(site1.url)
-.then(
-    (screenshot) => cdUpload(site1.site, screenshot))
-.then(
-    (result) => console.log(result))
-.catch((err) => {
+];
+
+
+
+// loop through the sites
+
+sites.forEach(function(site) {
+    console.log(`Processing site ${site.name} : ${site.url}...`);
+
+    screenshot(site.url)
+    .then(
+    (screenshot) => cdUpload(site.name, screenshot))
+    .then(
+    (result) => {
+        console.log(result);
+
+        // save to mongoDB
+        let newShot = new Shot({
+            site: site.name,
+            siteUrl: site.url,
+            url: result.url
+        });
+
+        newShot.save();
+
+
+    })
+    .catch((err) => {
     console.log(err);
 });
+
+
+
+
+  });
+
+
+
+
+
+
