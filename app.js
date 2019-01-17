@@ -47,7 +47,15 @@ const sites = [{
 {   name: 'Kurir',
     url: 'https://www.kurir.rs'},
     {   name: 'Informer',
-    url: 'https://www.informer.rs'}    
+    url: 'https://www.informer.rs'},
+    {   name: 'Alo',
+    url: 'https://www.alo.rs'} ,
+    {   name: 'Novosti',
+    url: 'https://www.novosti.rs'} ,
+    {   name: 'Telegraf',
+    url: 'https://www.telegraf.rs'} ,
+    {   name: 'Danas',
+    url: 'https://www.danas.rs'}      
 
 ];
 
@@ -79,6 +87,8 @@ sites.forEach(function(site) {
     .catch((err) => {
     console.log(err);
 });
+
+
 
 
 

@@ -32,8 +32,12 @@ module.exports = (name, screenshot) => {
 		};
 
 		cloudinary.v2.uploader.upload_stream(options, (error,result) => {
-			if (error) reject(error)
-			else resolve(result);
+			if (error) {
+				console.log('Finishing cdUpload - rejecting');
+				reject(error);}
+			else {
+				console.log('Finishing cdUpload - resolving');
+				resolve(result);}
 		}).end(screenshot);
 	});
 
